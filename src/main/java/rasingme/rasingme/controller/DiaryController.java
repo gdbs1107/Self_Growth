@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DiaryController {
 
+    //테스트입니다
     private final DiaryService diaryService;
 
     @GetMapping("/date")
