@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<h2>Login</h2>
+<form action="/login" method="post">
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+    </div>
+    <button type="submit">Login</button>
+    <!-- 인증 실패 시에만 오류 메시지 표시 -->
+    <p th:if="${param.error != null}" style="color: red;">Invalid username or password</p>
+</form>
+</body>
+</html>

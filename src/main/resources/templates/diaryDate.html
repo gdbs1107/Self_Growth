@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diary Date</title>
+    <!-- jQuery 및 jQuery UI 추가 -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body>
+<h2>Select a Date to Write Diary</h2>
+<!-- 달력을 표시할 div -->
+<div id="datepicker"></div>
+
+<script>
+    // Datepicker를 초기화하여 달력 표시
+    $(function () {
+        $("#datepicker").datepicker({
+            onSelect: function(dateText) {
+                // 선택한 날짜로 이동
+                window.location.href = "/diary?selectedDate=" + dateText;
+            }
+        });
+    });
+</script>
+</body>
+</html>

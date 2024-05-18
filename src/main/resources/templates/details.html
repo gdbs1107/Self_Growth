@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Details</title>
+</head>
+<body>
+<h1>Member Details</h1>
+<form action="/updateMember" method="post">
+    <input type="hidden" name="id" th:value="${member.id}">
+    <label for="username">Username:</label><br>
+    <input type="text" id="username" name="username" th:value="${member.username}" required>
+    <button type="submit" name="field" value="username">Update</button><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password" th:value="${member.password}" required>
+    <button type="submit" name="field" value="password">Update</button><br>
+    <label for="birthDate">Birth Date (YYYYMMDD):</label><br>
+    <input type="text" id="birthDate" name="birthDate" th:value="${member.birthDate}" required pattern="[0-9]{8}">
+    <button type="submit" name="field" value="birthDate">Update</button><br>
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" th:value="${member.email}" required>
+    <button type="submit" name="field" value="email">Update</button><br>
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" th:value="${member.name}" required>
+    <button type="submit" name="field" value="name">Update</button><br>
+</form>
+</body>
+</html>

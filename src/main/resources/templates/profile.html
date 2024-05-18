@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+</head>
+<body>
+<h1>Welcome to Your Profile Page</h1>
+<div>
+    <h2>Profile Actions</h2>
+    <button onclick="goToDiary()">Write Diary</button>
+    <button onclick="viewDetails()">View Personal Information</button>
+    <button onclick="viewDiaries()">View Your Diaries</button>
+</div>
+
+<script>
+    function goToDiary() {
+        window.location.href = "/diaryDate";
+    }
+
+    function viewDetails() {
+        window.location.href = "/details";
+    }
+
+    function viewDiaries() {
+        window.location.href = "/diaries";
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Diary</title>
+</head>
+<body>
+<h1>Edit Diary</h1>
+<form action="/updateDiary" method="post">
+    <input type="hidden" name="id" th:value="${diary.id}">
+    <label for="date">Date:</label><br>
+    <input type="text" id="date" name="date" th:value="${diary.date}" disabled><br>
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title" th:value="${diary.title}"><br>
+    <label for="content">Content:</label><br>
+    <textarea id="content" name="content" th:utext="${diary.content}"></textarea><br>
+    <label for="weather">Weather:</label><br>
+    <select id="weather" name="weather">
+        <option value="SUNNY" th:selected="${diary.weather == 'SUNNY'}">Sunny</option>
+        <option value="RAINY" th:selected="${diary.weather == 'RAINY'}">Rainy</option>
+        <option value="CLOUDY" th:selected="${diary.weather == 'CLOUDY'}">Cloudy</option>
+        <option value="SNOWY" th:selected="${diary.weather == 'SNOWY'}">Snowy</option>
+    </select><br>
+    <button type="submit">Update</button>
+</form>
+</body>
+</html>

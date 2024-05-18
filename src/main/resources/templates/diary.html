@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Write Diary</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <!-- Bootstrap Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+</head>
+<body>
+<h2>Write Your Diary</h2>
+<form action="/diary" method="post">
+    <div>
+        <label for="date">Date:</label>
+        <!-- Datepicker input -->
+        <input type="text" class="datepicker form-control" id="date" name="date" th:value="${selectedDate}" readonly>
+    </div>
+    <div>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" class="form-control">
+    </div>
+    <div>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" class="form-control"></textarea>
+    </div>
+    <div>
+        <label for="weather">Weather:</label>
+        <!-- Weather dropdown menu -->
+        <select id="weather" name="weather" class="form-control">
+            <option value="SUNNY">Sunny</option>
+            <option value="RAINY">Rainy</option>
+            <option value="SNOW">Snow</option>
+            <option value="CLOUDY">Cloudy</option> <!-- 수정된 부분 -->
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+<!-- Initialize Datepicker -->
+<script>
+    $(document).ready(function(){
+        $('.datepicker').datepicker({
+            format: 'mm/dd/yyyy',
+            autoclose: true
+        });
+    });
+</script>
+</body>
+</html>
