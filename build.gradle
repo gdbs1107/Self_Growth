@@ -33,6 +33,8 @@ dependencies {
 
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 
+	runtimeOnly 'mysql:mysql-connector-java'
+
 	//implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 

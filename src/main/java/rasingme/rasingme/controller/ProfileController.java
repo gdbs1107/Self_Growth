@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import rasingme.rasingme.Service.MemberService;
 import rasingme.rasingme.domain.Member;
 
-@RestController
+@Controller
 public class ProfileController {
 
     private final MemberService memberService;
@@ -18,7 +18,17 @@ public class ProfileController {
     public ProfileController(MemberService memberService, HttpServletRequest request) {
         this.memberService = memberService;
         this.request = request;
+
+
+         }
+
+    @GetMapping("/test")
+    public String test(){
+        return "home";
     }
+
+
+
 
 //    @GetMapping("/details")
 //    public String showProfile(Model model) {
