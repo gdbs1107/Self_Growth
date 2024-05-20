@@ -18,54 +18,10 @@ public class ProfileController {
     public ProfileController(MemberService memberService, HttpServletRequest request) {
         this.memberService = memberService;
         this.request = request;
+    }
 
-
-         }
-
-    @GetMapping("/test")
+    @GetMapping()
     public String test(){
         return "home";
     }
-
-
-
-
-//    @GetMapping("/details")
-//    public String showProfile(Model model) {
-//        Member loggedInUser = (Member) request.getSession().getAttribute("loggedInUser");
-//        Member member = memberService.findByUsername(loggedInUser.getUsername());
-//        model.addAttribute("member", member);
-//        return "details";
-//    }
-//
-//    @PostMapping("/update")
-//    @ResponseBody
-//    public String updateProfile(@RequestParam("field") String field, @RequestParam("value") String value) {
-//        Member loggedInUser = (Member) request.getSession().getAttribute("loggedInUser");
-//        Member member = memberService.findByUsername(loggedInUser.getUsername());
-//
-//        if ("name".equals(field)) {
-//            member.setName(value);
-//        } else if ("email".equals(field)) {
-//            member.setEmail(value);
-//        } else if ("birthDate".equals(field)) {
-//            member.setBirthDate(value);
-//        } else if ("username".equals(field)) {
-//            member.setUsername(value);
-//        } else if ("password".equals(field)) {
-//            member.setPassword(value);
-//        }
-//
-//        // Member 객체를 저장하여 DB에 반영
-//        memberService.save(member);
-//
-//        return "success";
-//    }
-
-//    @GetMapping("/profile")
-//    public String showProfilePage() {
-//        return "profile";
-//    }
-
-
 }
