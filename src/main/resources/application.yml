@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://root:0000@svc.sel5.cloudtype.app:30434/rasingme
+    url: jdbc:mysql://root:0000@svc.sel5.cloudtype.app:30434
     username: root
     password: Esc141414!
   jpa:
