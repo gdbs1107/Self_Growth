@@ -21,4 +21,8 @@ public class Diary {
 
     @Enumerated(EnumType.STRING)
     private Weather weather;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 }

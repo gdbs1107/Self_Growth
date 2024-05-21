@@ -6,7 +6,9 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -15,8 +17,8 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Pattern(regexp = "\\d{8}", message = "Birth date must be 8 digits")
-    private String birthDate;
+    @Temporal(TemporalType.DATE) // Date 타입으로 변경됨
+    private Date birthDate;
 
     private String email;
     private String username;
@@ -28,6 +30,7 @@ public class Member {
     //사용자 이름 추가
     private String name;
 
-
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Diary> diaries = new ArrayList<>();
 
 }
