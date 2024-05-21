@@ -23,7 +23,7 @@ public class Member {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Characters character;
+    private Characters characterType;
 
     //사용자 이름 추가
     private String name;
