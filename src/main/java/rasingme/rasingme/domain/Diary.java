@@ -23,6 +23,6 @@ public class Diary {
     private Weather weather;
 
     @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
     private Member member;
 }
