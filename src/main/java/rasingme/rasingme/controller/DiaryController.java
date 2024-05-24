@@ -29,8 +29,8 @@ public class DiaryController {
     }
 
     @PostMapping
-    public void saveDiary(@RequestParam Long memberId, @RequestBody Diary diary) {
-        diaryService.addDiary(diary, memberId);
+    public void saveDiary(@RequestParam String username, @RequestBody Diary diary) {
+        diaryService.addDiary(diary, username);
     }
 
     @GetMapping

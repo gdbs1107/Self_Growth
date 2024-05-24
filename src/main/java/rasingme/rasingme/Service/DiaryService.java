@@ -37,8 +37,8 @@ public class DiaryService {
         return diaryRepository.findByDate(date);
     }
 
-    public void addDiary(Diary diary, Long memberId) {
-        Member member = memberRepository.findById(memberId)
+    public void addDiary(Diary diary, String username) {
+        Member member = memberRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member ID"));
         diary.setMember(member);
         diaryRepository.save(diary);
