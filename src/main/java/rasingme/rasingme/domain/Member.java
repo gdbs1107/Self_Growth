@@ -21,6 +21,7 @@ public class Member {
     private Date birthDate;
 
     private String email;
+    @Column(unique = true, nullable = false) // username을 고유하게 설정
     private String username;
     private String password;
 
