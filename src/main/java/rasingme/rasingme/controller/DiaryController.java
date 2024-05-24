@@ -29,7 +29,7 @@ public class DiaryController {
     }
 
     @PostMapping
-    public void saveDiary(@RequestParam String username, @RequestBody Diary diary) {
+    public void saveDiary(@RequestBody String username, @RequestBody Diary diary) {
         diaryService.addDiary(diary, username);
     }
 
