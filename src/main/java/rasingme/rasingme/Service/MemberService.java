@@ -1,7 +1,6 @@
 package rasingme.rasingme.Service;
 
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final Validator validator;
 
+    //회원가입 로직
     public Member join(Member member) {
 
         if (memberRepository.existsByEmail(member.getEmail())) {
@@ -44,11 +44,14 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    //회원조회 로직
     public Member findByUsername(String username) {
         return memberRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
     }
 
+
+    //회원삭제 로직
     @Transactional
     public void withdraw(String username) {
         Member member = memberRepository.findByUsername(username)
@@ -56,15 +59,16 @@ public class MemberService {
         memberRepository.delete(member);
     }
 
+    //로그인 로직
     public boolean authenticate(String username, String password) {
         Member member = memberRepository.findByUsername(username)
                 .orElse(null);
         return member != null && member.getPassword().equals(password);
     }
 
-    // 개인정보 수정 기능 추가
-    public Member update(Member updatedMember) {
-        Member member = memberRepository.findByUsername(updatedMember.getUsername())
+    // 개인정보 수정 로직
+    public Member update(String username, Member updatedMember) {
+        Member member = memberRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
         member.setName(updatedMember.getName());
         member.setEmail(updatedMember.getEmail());
@@ -74,14 +78,4 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public void save(Member member) {
-        memberRepository.save(member);
-    }
-
-    // ID로 회원 조회
-    public Member findById(Long id) {
-        return memberRepository.findById(id).orElse(null);
-    }
-
-    // 이메일, 아이디 등으로 회원 조회하는 메소드 등을 추가할 수 있습니다.
 }

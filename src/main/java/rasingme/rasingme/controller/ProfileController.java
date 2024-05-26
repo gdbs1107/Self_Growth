@@ -1,13 +1,9 @@
 package rasingme.rasingme.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import rasingme.rasingme.Service.MemberService;
-import rasingme.rasingme.domain.Member;
 
 @Controller
 public class ProfileController {
