@@ -14,7 +14,6 @@ import java.util.List;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
     private Long id;
 
     @Temporal(TemporalType.DATE) // Date 타입으로 변경됨
