@@ -23,6 +23,6 @@ public class Diary {
     private Weather weather;
 
     @ManyToOne
-    @JoinColumn(name = "member_id", referencedColumnName = "id", nullable = false) // 외래 키 설정
+    @JoinColumn(name = "member_id", referencedColumnName = "member_id", nullable = false) // 외래 키 설정
     private Member member;
 }

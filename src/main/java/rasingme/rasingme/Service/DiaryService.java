@@ -75,4 +75,12 @@ public class DiaryService {
         diary.setWeather(updatedDiary.getWeather());
         diaryRepository.save(diary);
     }
+    public void deleteDiary(Long diaryId) {
+        // 다이어리 ID로 다이어리를 찾습니다.
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 다이어리를 찾을 수 없습니다."));
+
+        // 다이어리를 삭제합니다.
+        diaryRepository.delete(diary);
+    }
 }

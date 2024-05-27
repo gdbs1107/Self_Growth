@@ -37,4 +37,10 @@ public class DiaryController {
     public void updateDiary(@PathVariable("memberId") Long memberId, @PathVariable("selectedDate") String selectedDate, @RequestBody Diary updatedDiary) {
         diaryService.updateDiary(memberId, selectedDate, updatedDiary);
     }
+
+    @DeleteMapping("/{memberId}")
+    public void withdrawMember(@PathVariable("memberId") Long memberId) {
+        // 회원 탈퇴 처리
+        diaryService.deleteDiary(memberId);
+    }
 }
