@@ -28,7 +28,7 @@ public class DiaryController {
         diaryService.addDiary(diary, memberId);
     }
 
-    @DeleteMapping("/{memberId}/{selectedDate}")
+    @PostMapping("/{memberId}/{selectedDate}")
     public void deleteDiary(@PathVariable("memberId") Long memberId, @PathVariable("selectedDate") String selectedDate) {
         diaryService.deleteDiary(memberId, selectedDate);
     }
