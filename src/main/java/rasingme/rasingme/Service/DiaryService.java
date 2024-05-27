@@ -75,12 +75,24 @@ public class DiaryService {
         diary.setWeather(updatedDiary.getWeather());
         diaryRepository.save(diary);
     }
-    public void deleteDiary(Long diaryId) {
-        // 다이어리 ID로 다이어리를 찾습니다.
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 다이어리를 찾을 수 없습니다."));
+    public void deleteDiary(Long memberId, String dateStr) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
 
-        // 다이어리를 삭제합니다.
-        diaryRepository.delete(diary);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            date = sdf.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("날짜 형식이 올바르지 않습니다.");
+        }
+
+        List<Diary> diaries = diaryRepository.findByMemberIdAndDate(memberId, date);
+        if (diaries.isEmpty()) {
+            throw new IllegalArgumentException("해당 회원과 날짜에 대한 다이어리를 찾을 수 없습니다.");
+        }
+
+        diaryRepository.deleteAll(diaries);
     }
 }

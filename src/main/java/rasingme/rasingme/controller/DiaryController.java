@@ -39,8 +39,7 @@ public class DiaryController {
     }
 
     @DeleteMapping("/{memberId}")
-    public void withdrawMember(@PathVariable("memberId") Long memberId) {
-        // 회원 탈퇴 처리
-        diaryService.deleteDiary(memberId);
+    public void deleteDiary(@PathVariable("memberId") Long memberId, @RequestParam("date") String dateStr) {
+        diaryService.deleteDiary(memberId, dateStr);
     }
 }
