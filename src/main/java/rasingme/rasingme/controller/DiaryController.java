@@ -28,6 +28,11 @@ public class DiaryController {
         diaryService.addDiary(diary, memberId);
     }
 
+    @DeleteMapping("/{memberId}/{selectedDate}")
+    public void deleteDiary(@PathVariable("memberId") Long memberId, @PathVariable("selectedDate") String selectedDate) {
+        diaryService.deleteDiary(memberId, selectedDate);
+    }
+
     @GetMapping("/{memberId}")
     public List<Diary> getAllDiariesByMemberId(@PathVariable("memberId") Long memberId) {
         return diaryService.getAllDiariesByMemberId(memberId);
@@ -38,8 +43,5 @@ public class DiaryController {
         diaryService.updateDiary(memberId, selectedDate, updatedDiary);
     }
 
-    @DeleteMapping("/{memberId}/{selectedDate}")
-    public void deleteDiary(@PathVariable("memberId") Long memberId, @PathVariable("selectedDate") String selectedDate) {
-        diaryService.deleteDiary(memberId, selectedDate);
-    }
+
 }
