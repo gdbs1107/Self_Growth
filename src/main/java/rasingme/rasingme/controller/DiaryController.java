@@ -13,10 +13,10 @@ public class DiaryController {
 
     private final DiaryService diaryService;
 
-    @GetMapping("/date")
-    public String showDiaryDatePage() {
-        return "diaryDate";
-    }
+//    @GetMapping("/date")
+//    public String showDiaryDatePage() {
+//        return "diaryDate";
+//    }
 
     @GetMapping("/{memberId}/{selectedDate}")
     public List<Diary> getDiaries(@PathVariable("memberId") Long memberId, @PathVariable("selectedDate") String selectedDate) {
