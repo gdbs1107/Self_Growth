@@ -38,8 +38,8 @@ public class DiaryController {
         diaryService.updateDiary(memberId, selectedDate, updatedDiary);
     }
 
-    @DeleteMapping("/{memberId}")
-    public void deleteDiary(@PathVariable("memberId") Long memberId, @RequestParam("date") String dateStr) {
-        diaryService.deleteDiary(memberId, dateStr);
+    @DeleteMapping("/{memberId}/{selectedDate}")
+    public void deleteDiary(@PathVariable("memberId") Long memberId, @PathVariable("selectedDate") String selectedDate) {
+        diaryService.deleteDiary(memberId, selectedDate);
     }
 }
