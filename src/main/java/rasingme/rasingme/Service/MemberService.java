@@ -45,16 +45,16 @@ public class MemberService {
     }
 
     //회원조회 로직
-    public Member findByUsername(String username) {
-        return memberRepository.findByUsername(username)
+    // 회원조회 로직
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
     }
 
-
-    //회원삭제 로직
+    // 회원삭제 로직
     @Transactional
-    public void withdraw(String username) {
-        Member member = memberRepository.findByUsername(username)
+    public void withdraw(Long memberId) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
         memberRepository.delete(member);
     }
@@ -67,8 +67,8 @@ public class MemberService {
     }
 
     // 개인정보 수정 로직
-    public Member update(String username, Member updatedMember) {
-        Member member = memberRepository.findByUsername(username)
+    public Member update(Long memberId, Member updatedMember) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
         member.setName(updatedMember.getName());
         member.setEmail(updatedMember.getEmail());

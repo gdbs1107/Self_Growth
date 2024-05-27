@@ -27,19 +27,19 @@ public class    MemberController {
         memberService.join(member);
     }
 
-    @PostMapping("/withdraw")
-    public void withdrawMember(@RequestParam("username") String username) {
+    @DeleteMapping("/{memberId}")
+    public void withdrawMember(@PathVariable("memberId") Long memberId) {
         // 회원 탈퇴 처리
-        memberService.withdraw(username);
+        memberService.withdraw(memberId);
     }
 
-    @PutMapping("/{username}")
-    public void updateMember(@PathVariable("username") String username, @RequestBody Member updatedMember) {
-        memberService.update(username, updatedMember);
+    @PutMapping("/{memberId}")
+    public void updateMember(@PathVariable("memberId") Long memberId, @RequestBody Member updatedMember) {
+        memberService.update(memberId, updatedMember);
     }
 
-    @GetMapping("/{username}")
-    public Member getMember(@PathVariable("username") String username) {
-        return memberService.findByUsername(username);
+    @GetMapping("/{memberId}")
+    public Member getMember(@PathVariable("memberId") Long memberId) {
+        return memberService.findById(memberId);
     }
 }

@@ -22,14 +22,14 @@ public class DiaryService {
     private final MemberRepository memberRepository;
 
 
-    public List<Diary> getAllDiariesByUsername(String username) {
-        Member member = memberRepository.findByUsername(username)
+    public List<Diary> getAllDiariesByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
-        return diaryRepository.findByMember(member);
+        return diaryRepository.findByMemberId(memberId);
     }
 
-    public List<Diary> getDiariesByUsernameAndDate(String username, String dateStr) {
-        Member member = memberRepository.findByUsername(username)
+    public List<Diary> getDiariesByMemberIdAndDate(Long memberId, String dateStr) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -41,33 +41,18 @@ public class DiaryService {
             throw new IllegalArgumentException("날짜 형식이 올바르지 않습니다.");
         }
 
-        return diaryRepository.findByMemberAndDate(member, date);
+        return diaryRepository.findByMemberIdAndDate(memberId, date);
     }
 
-
-
-    public List<Diary> getDiariesByDate(String dateStr) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date;
-        try {
-            date = sdf.parse(dateStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return diaryRepository.findByDate(date);
-    }
-
-    public void addDiary(Diary diary, String username) {
-        Member member = memberRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid member ID"));
+    public void addDiary(Diary diary, Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
         diary.setMember(member);
         diaryRepository.save(diary);
     }
 
-    public void updateDiary(String username, String selectedDate, Diary updatedDiary) {
-        Member member = memberRepository.findByUsername(username)
+    public void updateDiary(Long memberId, String selectedDate, Diary updatedDiary) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date;
@@ -77,7 +62,7 @@ public class DiaryService {
             e.printStackTrace();
             throw new IllegalArgumentException("날짜 형식이 올바르지 않습니다.");
         }
-        List<Diary> diaries = diaryRepository.findByMemberAndDate(member, date);
+        List<Diary> diaries = diaryRepository.findByMemberIdAndDate(memberId, date);
 
         if (diaries.isEmpty()) {
             throw new IllegalArgumentException("해당 회원과 날짜에 대한 다이어리를 찾을 수 없습니다.");

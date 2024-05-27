@@ -27,10 +27,11 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Characters characterType;
 
+
     //사용자 이름 추가
     private String name;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Diary> diaries = new ArrayList<>();
 
 }

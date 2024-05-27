@@ -18,23 +18,23 @@ public class DiaryController {
         return "diaryDate";
     }
 
-    @GetMapping("/{username}/{selectedDate}")
-    public List<Diary> getDiaries(@PathVariable("username") String username, @PathVariable("selectedDate") String selectedDate) {
-        return diaryService.getDiariesByUsernameAndDate(username, selectedDate);
+    @GetMapping("/{memberId}/{selectedDate}")
+    public List<Diary> getDiaries(@PathVariable("memberId") Long memberId, @PathVariable("selectedDate") String selectedDate) {
+        return diaryService.getDiariesByMemberIdAndDate(memberId, selectedDate);
     }
 
     @PostMapping
-    public void saveDiary(@RequestParam String username, @RequestBody Diary diary) {
-        diaryService.addDiary(diary, username);
+    public void saveDiary(@RequestParam Long memberId, @RequestBody Diary diary) {
+        diaryService.addDiary(diary, memberId);
     }
 
-    @GetMapping("/{username}")
-    public List<Diary> getAllDiariesByUsername(@PathVariable("username") String username) {
-        return diaryService.getAllDiariesByUsername(username);
+    @GetMapping("/{memberId}")
+    public List<Diary> getAllDiariesByMemberId(@PathVariable("memberId") Long memberId) {
+        return diaryService.getAllDiariesByMemberId(memberId);
     }
 
-    @PutMapping("/{username}/{selectedDate}")
-    public void updateDiary(@PathVariable("username") String username, @PathVariable("selectedDate") String selectedDate, @RequestBody Diary updatedDiary) {
-        diaryService.updateDiary(username, selectedDate, updatedDiary);
+    @PutMapping("/{memberId}/{selectedDate}")
+    public void updateDiary(@PathVariable("memberId") Long memberId, @PathVariable("selectedDate") String selectedDate, @RequestBody Diary updatedDiary) {
+        diaryService.updateDiary(memberId, selectedDate, updatedDiary);
     }
 }
