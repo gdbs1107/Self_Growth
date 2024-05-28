@@ -13,7 +13,6 @@ import java.util.Set;
 @Service
 @Transactional
 @RequiredArgsConstructor
-
 public class MemberService {
 
     private final MemberRepository memberRepository;
