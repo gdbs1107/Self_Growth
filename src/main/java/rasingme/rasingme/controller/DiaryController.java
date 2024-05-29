@@ -1,13 +1,9 @@
 package rasingme.rasingme.controller;
 
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import rasingme.rasingme.Service.DiaryService;
 import rasingme.rasingme.domain.Diary;
-import rasingme.rasingme.token.JwtProvider;
-
 import java.util.List;
 
 @RestController
@@ -16,7 +12,6 @@ import java.util.List;
 public class DiaryController {
 
     private final DiaryService diaryService;
-    private final JwtProvider jwtProvider;
 
     @GetMapping("/date")
     public String showDiaryDatePage() {
@@ -24,41 +19,29 @@ public class DiaryController {
     }
 
     @GetMapping("/{memberId}/{selectedDate}")
-    public List<Diary> getDiaries(@PathVariable("memberId") Long memberId, @PathVariable("selectedDate") String selectedDate, HttpServletRequest request) {
-        Claims claims = validateToken(request);
+    public List<Diary> getDiaries(@PathVariable("memberId") Long memberId, @PathVariable("selectedDate") String selectedDate) {
         return diaryService.getDiariesByMemberIdAndDate(memberId, selectedDate);
     }
 
     @PostMapping
-    public void saveDiary(@RequestParam Long memberId, @RequestBody Diary diary, HttpServletRequest request) {
-        Claims claims = validateToken(request);
+    public void saveDiary(@RequestParam Long memberId, @RequestBody Diary diary) {
         diaryService.addDiary(diary, memberId);
     }
 
     @DeleteMapping("/{memberId}/{selectedDate}")
-    public void deleteDiary(@PathVariable("memberId") Long memberId, @PathVariable("selectedDate") String selectedDate, HttpServletRequest request) {
-        Claims claims = validateToken(request);
+    public void deleteDiary(@PathVariable("memberId") Long memberId, @PathVariable("selectedDate") String selectedDate) {
         diaryService.deleteDiary(memberId, selectedDate);
     }
 
     @GetMapping("/{memberId}")
-    public List<Diary> getAllDiariesByMemberId(@PathVariable("memberId") Long memberId, HttpServletRequest request) {
-        Claims claims = validateToken(request);
+    public List<Diary> getAllDiariesByMemberId(@PathVariable("memberId") Long memberId) {
         return diaryService.getAllDiariesByMemberId(memberId);
     }
 
     @PutMapping("/{memberId}/{selectedDate}")
-    public void updateDiary(@PathVariable("memberId") Long memberId, @PathVariable("selectedDate") String selectedDate, @RequestBody Diary updatedDiary,HttpServletRequest request) {
-        Claims claims = validateToken(request);
+    public void updateDiary(@PathVariable("memberId") Long memberId, @PathVariable("selectedDate") String selectedDate, @RequestBody Diary updatedDiary) {
         diaryService.updateDiary(memberId, selectedDate, updatedDiary);
     }
 
-    private Claims validateToken(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        if (token == null || !token.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Invalid or missing token");
-        }
-        return jwtProvider.parseJwtToken(token);
-    }
 
 }

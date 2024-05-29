@@ -1,14 +1,11 @@
 package rasingme.rasingme.controller;
 
 
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
 import rasingme.rasingme.Service.MemberService;
 import rasingme.rasingme.domain.Member;
-import rasingme.rasingme.token.JwtProvider;
 
 @RestController
 @RequestMapping("/api/members")
@@ -16,17 +13,12 @@ import rasingme.rasingme.token.JwtProvider;
 public class    MemberController {
 
     private final MemberService memberService;
-    private final JwtProvider jwtProvider;
 
     @PostMapping("/login")
-    public String processLogin(@RequestParam("username") String username,
-                               @RequestParam("password") String password) {
-        if (memberService.authenticate(username, password)) {
-            // 로그인 인증 결과가 성공이면 토큰을 발급
-            return jwtProvider.createToken(username);
-        } else {
-            throw new IllegalArgumentException("Invalid username or password");
-        }
+    public boolean processLogin(@RequestParam("username") String username,
+                                @RequestParam("password") String password) {
+        // 로그인 인증 결과를 반환
+        return memberService.authenticate(username, password);
     }
 
     @PostMapping("/register")
@@ -36,30 +28,18 @@ public class    MemberController {
     }
 
     @DeleteMapping("/{memberId}")
-    public void withdrawMember(@PathVariable("memberId") Long memberId, HttpServletRequest request) {
-        // 회원 탈퇴 처리 전에 토큰 검증
-        Claims claims = validateToken(request);
+    public void withdrawMember(@PathVariable("memberId") Long memberId) {
+        // 회원 탈퇴 처리
         memberService.withdraw(memberId);
     }
 
-
     @PutMapping("/{memberId}")
-    public void updateMember(@PathVariable("memberId") Long memberId, @RequestBody Member updatedMember, HttpServletRequest request) {
-        Claims claims = validateToken(request);
+    public void updateMember(@PathVariable("memberId") Long memberId, @RequestBody Member updatedMember) {
         memberService.update(memberId, updatedMember);
     }
 
     @GetMapping("/{memberId}")
-    public Member getMember(@PathVariable("memberId") Long memberId,HttpServletRequest request) {
-        Claims claims = validateToken(request);
+    public Member getMember(@PathVariable("memberId") Long memberId) {
         return memberService.findById(memberId);
-    }
-
-    private Claims validateToken(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        if (token == null || !token.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Invalid or missing token");
-        }
-        return jwtProvider.parseJwtToken(token);
     }
 }
