@@ -12,7 +12,7 @@ import java.util.Base64;
 import java.util.Date;
 
 @Component
-public class JwtProvider {
+public class JwtProvider{
 
     @Value("${jwt.password}")
     private String secretKey;
