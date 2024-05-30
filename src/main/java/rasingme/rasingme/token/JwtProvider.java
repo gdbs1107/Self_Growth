@@ -14,8 +14,11 @@ import java.util.Date;
 @Component
 public class JwtProvider {
 
-    @Value("${jwt.password}")
-    private String secretKey;
+    private final String secretKey;
+
+    public JwtProvider(@Value("${jwt.password}") String secretKey) {
+        this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+    }
 
     //==토큰 생성 메소드==//
     public String createToken(String subject) {
@@ -27,8 +30,8 @@ public class JwtProvider {
                 .setIssuer("test") // 토큰발급자(iss)
                 .setIssuedAt(now) // 발급시간(iat)
                 .setExpiration(expiration) // 만료시간(exp)
-                .setSubject(subject) //  토큰 제목(subject)
-                .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(secretKey.getBytes())) // 알고리즘, 시크릿 키
+                .setSubject(subject) // 토큰 제목(subject)
+                .signWith(SignatureAlgorithm.HS256, secretKey) // 알고리즘, 시크릿 키
                 .compact();
     }
 
@@ -36,7 +39,7 @@ public class JwtProvider {
     public Claims parseJwtToken(String token) {
         token = BearerRemove(token); // Bearer 제거
         return Jwts.parser()
-                .setSigningKey(Base64.getEncoder().encodeToString(secretKey.getBytes()))
+                .setSigningKey(Base64.getDecoder().decode(secretKey))
                 .parseClaimsJws(token)
                 .getBody();
     }
