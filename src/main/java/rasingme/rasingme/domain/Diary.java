@@ -1,5 +1,6 @@
 package rasingme.rasingme.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,5 +25,6 @@ public class Diary {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false) // referencedColumnName 제거
+    @JsonIgnoreProperties("diaries")
     private Member member;
 }
