@@ -1,14 +1,13 @@
 package rasingme.rasingme.controller;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rasingme.rasingme.Service.DiaryService;
 import rasingme.rasingme.domain.Diary;
-import rasingme.rasingme.domain.Weather;
+import rasingme.rasingme.token.JwtProvider;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -17,43 +16,77 @@ import java.util.List;
 public class DiaryController {
 
     private final DiaryService diaryService;
+    private final JwtProvider jwtProvider;
+
+    private boolean validateToken(String token) {
+        try {
+            jwtProvider.parseJwtToken(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private String getSubjectFromToken(String token) {
+        Claims claims = jwtProvider.parseJwtToken(token);
+        return claims.getSubject();
+    }
 
     @GetMapping("/date")
     public String showDiaryDatePage() {
         return "diaryDate";
     }
 
-    @GetMapping("/{selectedDate}")
-    public List<Diary> getDiaries(@PathVariable("selectedDate") String selectedDate) {
-        // 선택된 날짜의 다이어리 리스트 가져오기
-        return diaryService.getDiariesByDate(selectedDate);
+    @GetMapping("/{memberId}/{selectedDate}")
+    public ResponseEntity<List<Diary>> getDiaries(@RequestHeader("Authorization") String token,
+                                                  @PathVariable("memberId") Long memberId,
+                                                  @PathVariable("selectedDate") String selectedDate) {
+        if (!validateToken(token)) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(diaryService.getDiariesByMemberIdAndDate(memberId, selectedDate));
     }
 
     @PostMapping
-    public void saveDiary(@RequestBody Diary diary) {
-        // 생성한 일기 저장
-        diaryService.addDiary(diary);
-    }
-
-    @GetMapping
-    public List<Diary> getAllDiaries() {
-        return diaryService.getAllDiaries();
-    }
-
-    @PutMapping("/{id}")
-    public void updateDiary(@PathVariable("id") Long id, @RequestBody Diary updatedDiary) {
-        // 수정할 다이어리 객체 가져오기
-        Diary diary = diaryService.getDiaryById(id);
-        if (diary != null) {
-            // 다이어리 정보 업데이트
-            diary.setTitle(updatedDiary.getTitle());
-            diary.setContent(updatedDiary.getContent());
-            diary.setWeather(updatedDiary.getWeather());
-
-            // 업데이트된 다이어리 저장
-            diaryService.updateDiary(diary);
+    public ResponseEntity<Void> saveDiary(@RequestHeader("Authorization") String token,
+                                          @RequestParam Long memberId,
+                                          @RequestBody Diary diary) {
+        if (!validateToken(token)) {
+            return ResponseEntity.status(401).build();
         }
+        diaryService.addDiary(diary, memberId);
+        return ResponseEntity.ok().build();
     }
 
-}
+    @DeleteMapping("/{memberId}/{selectedDate}")
+    public ResponseEntity<Void> deleteDiary(@RequestHeader("Authorization") String token,
+                                            @PathVariable("memberId") Long memberId,
+                                            @PathVariable("selectedDate") String selectedDate) {
+        if (!validateToken(token)) {
+            return ResponseEntity.status(401).build();
+        }
+        diaryService.deleteDiary(memberId, selectedDate);
+        return ResponseEntity.ok().build();
+    }
 
+    @GetMapping("/{memberId}")
+    public ResponseEntity<List<Diary>> getAllDiariesByMemberId(@RequestHeader("Authorization") String token,
+                                                               @PathVariable("memberId") Long memberId) {
+        if (!validateToken(token)) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(diaryService.getAllDiariesByMemberId(memberId));
+    }
+
+    @PutMapping("/{memberId}/{selectedDate}")
+    public ResponseEntity<Void> updateDiary(@RequestHeader("Authorization") String token,
+                                            @PathVariable("memberId") Long memberId,
+                                            @PathVariable("selectedDate") String selectedDate,
+                                            @RequestBody Diary updatedDiary) {
+        if (!validateToken(token)) {
+            return ResponseEntity.status(401).build();
+        }
+        diaryService.updateDiary(memberId, selectedDate, updatedDiary);
+        return ResponseEntity.ok().build();
+    }
+}

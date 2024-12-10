@@ -1,66 +1,86 @@
 package rasingme.rasingme.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
+
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import rasingme.rasingme.Service.MemberService;
 import rasingme.rasingme.domain.Member;
-
-import java.security.Principal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import rasingme.rasingme.token.JwtProvider;
 
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
-public class    MemberController {
+public class MemberController {
 
     private final MemberService memberService;
+    private final JwtProvider jwtProvider;
 
-    @PostMapping("/login")
-    public boolean processLogin(@RequestParam("username") String username,
-                                @RequestParam("password") String password) {
-        // 로그인 인증 결과를 반환
-        return memberService.authenticate(username, password);
-    }
-
-    @PostMapping("/register")
-    public void processRegistration(@RequestBody Member member) {
-        // 회원 가입 처리
-        memberService.join(member);
-    }
-
-    @PostMapping("/withdraw")
-    public void withdrawMember(@RequestParam("username") String username) {
-        // 회원 탈퇴 처리
-        memberService.withdraw(username);
-    }
-
-    @PutMapping("/{id}")
-    public void updateMember(@PathVariable("id") Long id, @RequestBody Member updatedMember) {
-        // 회원 정보 업데이트 처리
-        Member member = memberService.findById(id);
-        if (member != null) {
-            member.setName(updatedMember.getName());
-            member.setEmail(updatedMember.getEmail());
-            member.setBirthDate(updatedMember.getBirthDate());
-            member.setUsername(updatedMember.getUsername());
-            member.setPassword(updatedMember.getPassword());
-
-            memberService.update(member);
+    private boolean validateToken(String token) {
+        try {
+            jwtProvider.parseJwtToken(token);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
-    @GetMapping("/{id}")
-    public Member getMember(@PathVariable("id") Long id) {
-        // 특정 ID의 회원 정보 반환
-        return memberService.findById(id);
+    private String getSubjectFromToken(String token) {
+        Claims claims = jwtProvider.parseJwtToken(token);
+        return claims.getSubject();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> processLogin(@RequestParam("username") String username,
+                                               @RequestParam("password") String password) {
+        // 로그인 인증 결과를 반환
+        if (memberService.authenticate(username, password)) {
+            // 인증 성공 시 JWT 토큰 생성
+            String token = jwtProvider.createToken(username);
+            return ResponseEntity.ok(token);
+        } else {
+            // 인증 실패 시 401 Unauthorized 응답
+            return ResponseEntity.status(401).body("Invalid credentials");
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Void> processRegistration(@RequestBody Member member) {
+        // 회원 가입 처리
+        memberService.join(member);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{memberId}")
+    public ResponseEntity<Void> withdrawMember(@RequestHeader("Authorization") String token,
+                                               @PathVariable("memberId") Long memberId) {
+        if (!validateToken(token)) {
+            return ResponseEntity.status(401).build();
+        }
+        memberService.withdraw(memberId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{memberId}")
+    public ResponseEntity<Void> updateMember(@RequestHeader("Authorization") String token,
+                                             @PathVariable("memberId") Long memberId,
+                                             @RequestBody Member updatedMember) {
+        if (!validateToken(token)) {
+            return ResponseEntity.status(401).build();
+        }
+        memberService.update(memberId, updatedMember);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{memberId}")
+    public ResponseEntity<Member> getMember(@RequestHeader("Authorization") String token,
+                                            @PathVariable("memberId") Long memberId) {
+        if (!validateToken(token)) {
+            return ResponseEntity.status(401).build();
+        }
+        Member member = memberService.findById(memberId);
+        return ResponseEntity.ok(member);
     }
 }
